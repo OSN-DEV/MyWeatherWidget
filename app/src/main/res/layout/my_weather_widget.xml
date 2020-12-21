@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
+    xmlns:app="http://schemas.Android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/widget_background"
@@ -10,7 +11,18 @@
     android:padding="@dimen/widget_margin"
     android:theme="@style/ThemeOverlay.MyWeatherWidget.AppWidgetContainer">
 
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:textColor="@color/widget_text"
+        android:layout_above="@+id/icon_container"
+        tools:text="N/A"
+        android:visibility="gone"/>
     <FrameLayout
+        android:id="@+id/icon_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/temperature">
@@ -28,7 +40,10 @@
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:textColor="@color/widget_text"
-            android:textSize="22dp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeMaxTextSize="100sp"
+            app:autoSizeStepGranularity="2sp"
             tools:text="N/A" />
     </FrameLayout>
 

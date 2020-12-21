@@ -10,6 +10,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
+import android.util.TimeUtils
+import java.util.concurrent.TimeUnit
 
 class WeatherJobService : JobService() {
     companion object {
@@ -17,9 +19,9 @@ class WeatherJobService : JobService() {
             val componentName = ComponentName(context, WeatherJobService::class.java)
             return JobInfo.Builder(jobId, componentName).apply {
                 setPersisted(true)
-                setMinimumLatency(latency * (1000 * 60))
+//                setMinimumLatency(TimeUnit.MINUTES.toMillis(1))
                 setRequiredNetworkType(JobInfo.NETWORK_TYPE_NONE)
-                setPeriodic(60 * 60 * 1000)
+                setPeriodic(TimeUnit.MINUTES.toMillis(60))
             }.build()
         }
     }
@@ -33,12 +35,18 @@ class WeatherJobService : JobService() {
     override fun onStartJob(params: JobParameters?): Boolean {
         Log.d(tag, "onStartJob")
         Thread(Runnable {
-            val intent = Intent(this, WeatherJobService::class.java)
+//            val widget = ComponentName(application, MyWeatherWidget::class.java)
+//            val manager = AppWidgetManager.getInstance(application)
+//            val ids = manager.getAppWidgetIds(widget)
+//            manager.updateAppWidget(application, manager, ids)
+
+            val intent = Intent(this, MyWeatherWidget::class.java)
             intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-            val ids = AppWidgetManager.getInstance(application).getAppWidgetIds(ComponentName(application, WeatherJobService::class.java))
+            val ids = AppWidgetManager.getInstance(application).getAppWidgetIds(ComponentName(application, MyWeatherWidget::class.java))
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
-            sendBroadcast(intent)
+            application.sendBroadcast(intent)
+            Log.d(tag, "send boardcast")
         }).start()
-        return false
+        return true
     }
 }
